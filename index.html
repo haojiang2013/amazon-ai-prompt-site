@@ -82,6 +82,19 @@
             .nav-links.active { display: flex; }
             section { padding: 3rem 5%; }
         }
+
+        /* Specific Tool Styles to match your existing CSS */
+        .tool-form { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+        .tool-input { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 0.95rem; font-family: inherit; }
+        .tool-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .tool-textarea { resize: vertical; min-height: 100px; }
+        .tool-btn { background: var(--primary); color: var(--white); border: none; padding: 0.8rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .tool-btn:hover { background: var(--primary-dark); }
+        .tool-output-box { background: var(--light); padding: 1rem; border-radius: 6px; border: 1px solid #E5E7EB; margin-top: 1rem; position: relative; }
+        .tool-result { white-space: pre-wrap; font-size: 0.9rem; color: var(--dark); margin-bottom: 0.5rem; }
+        .char-count { font-size: 0.8rem; color: var(--gray); text-align: right; margin-top: 0.5rem; }
+        .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: var(--secondary); color: white; border: none; padding: 0.3rem 0.6rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer; }
+        .copy-btn:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -97,6 +110,7 @@
                     <li><a href="#product-descriptions">Descriptions</a></li>
                     <li><a href="#tools-review">Tools Review</a></li>
                     <li><a href="#free-tools">Free Tools</a></li>
+                    <li><a href="#ai-tools">AI Tools</a></li>
                     <li><a href="#blog">Blog</a></li>
                     <li><a href="#about-us">About Us</a></li>
                 </ul>
@@ -190,6 +204,63 @@
             </div>
         </section>
 
+        <!-- 新增的AI工具板块 -->
+        <section id="ai-tools">
+            <div class="section-header">
+                <h2>Amazon Listing AI Tools</h2>
+                <p>Use our free, interactive tools to generate optimized Amazon listings, bullet points, and keywords instantly.</p>
+            </div>
+            <div class="grid grid-3">
+                
+                <div class="card">
+                    <h3>Listing Title Builder</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Generate an A9-optimized title using the standard Amazon formula.</p>
+                    <div class="tool-form">
+                        <input type="text" id="t1-brand" class="tool-input" placeholder="Brand Name (e.g., Anker)">
+                        <input type="text" id="t1-keyword" class="tool-input" placeholder="Main Keyword (e.g., Portable Charger)">
+                        <input type="text" id="t1-feature1" class="tool-input" placeholder="Key Feature (e.g., 10000mAh)">
+                        <input type="text" id="t1-feature2" class="tool-input" placeholder="Benefit/Spec (e.g., 20W Fast Charging)">
+                        <input type="text" id="t1-target" class="tool-input" placeholder="Target Audience/Use (e.g., for iPhone 14)">
+                        <button class="tool-btn" onclick="generateTitle()">Generate Title</button>
+                    </div>
+                    <div class="tool-output-box" id="t1-output-box" style="display: none;">
+                        <button class="copy-btn" onclick="copyText('t1-result')">Copy</button>
+                        <div id="t1-result" class="tool-result"></div>
+                        <div id="t1-count" class="char-count"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>5 Bullet Points Formatter</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Instantly format raw text into high-converting Amazon bullets.</p>
+                    <div class="tool-form">
+                        <textarea id="t2-input" class="tool-input tool-textarea" placeholder="Enter 5 features/benefits, one per line. Example:&#10;Fast charging: powers up in 30 mins&#10;Durable: made with aluminum&#10;Compact: fits in your pocket"></textarea>
+                        <button class="tool-btn" onclick="generateBullets()">Format Bullets</button>
+                    </div>
+                    <div class="tool-output-box" id="t2-output-box" style="display: none;">
+                        <button class="copy-btn" onclick="copyText('t2-result')">Copy</button>
+                        <div id="t2-result" class="tool-result"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Long-Tail Keyword Expander</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Multiply seed keywords for backend search terms or PPC campaigns.</p>
+                    <div class="tool-form">
+                        <input type="text" id="t3-modifiers" class="tool-input" placeholder="Modifiers (comma separated, e.g., best, cheap, 2023)">
+                        <textarea id="t3-seeds" class="tool-input tool-textarea" placeholder="Seed Keywords (one per line, e.g.,&#10;yoga mat&#10;fitness band)"></textarea>
+                        <button class="tool-btn" onclick="expandKeywords()">Expand Keywords</button>
+                    </div>
+                    <div class="tool-output-box" id="t3-output-box" style="display: none;">
+                        <button class="copy-btn" onclick="copyText('t3-result')">Copy</button>
+                        <div id="t3-result" class="tool-result"></div>
+                        <div id="t3-count" class="char-count"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         <section id="blog">
             <div class="section-header">
                 <h2>E-commerce AI Strategy Blog</h2>
@@ -265,6 +336,89 @@
                 });
             });
         });
+
+        // Copy to Clipboard Utility
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Tool 1 Logic: Title Generator
+        function generateTitle() {
+            const brand = document.getElementById('t1-brand').value.trim();
+            const keyword = document.getElementById('t1-keyword').value.trim();
+            const f1 = document.getElementById('t1-feature1').value.trim();
+            const f2 = document.getElementById('t1-feature2').value.trim();
+            const target = document.getElementById('t1-target').value.trim();
+
+            const components = [brand, keyword, f1, f2, target].filter(Boolean);
+            if (components.length === 0) return alert("Please enter at least a Brand and Keyword.");
+
+            const title = components.join(' - ') + ' - Premium Quality';
+            
+            document.getElementById('t1-result').innerText = title;
+            const countSpan = document.getElementById('t1-count');
+            countSpan.innerText = `${title.length} characters`;
+            countSpan.style.color = title.length > 200 ? 'red' : 'var(--secondary)';
+            
+            document.getElementById('t1-output-box').style.display = 'block';
+        }
+
+        // Tool 2 Logic: 5 Bullet Points Formatter
+        function generateBullets() {
+            const input = document.getElementById('t2-input').value.trim();
+            if (!input) return alert("Please enter some features.");
+
+            const lines = input.split('\n').filter(line => line.trim() !== '');
+            let formattedBullets = '';
+
+            lines.slice(0, 5).forEach(line => {
+                // Split by colon or dash if user provided a natural separator
+                let parts = line.split(/[:\-]/);
+                if (parts.length > 1) {
+                    let benefit = parts[0].trim().toUpperCase();
+                    let desc = parts.slice(1).join(' ').trim();
+                    formattedBullets += `✅ [${benefit}] - ${desc.charAt(0).toUpperCase() + desc.slice(1)}\n\n`;
+                } else {
+                    formattedBullets += `✅ ${line.trim().charAt(0).toUpperCase() + line.trim().slice(1)}\n\n`;
+                }
+            });
+
+            document.getElementById('t2-result').innerText = formattedBullets.trim();
+            document.getElementById('t2-output-box').style.display = 'block';
+        }
+
+        // Tool 3 Logic: Keyword Expander
+        function expandKeywords() {
+            const modifierInput = document.getElementById('t3-modifiers').value;
+            const seedsInput = document.getElementById('t3-seeds').value;
+
+            if (!seedsInput) return alert("Please enter seed keywords.");
+
+            const modifiers = modifierInput.split(',').map(m => m.trim()).filter(Boolean);
+            const seeds = seedsInput.split('\n').map(s => s.trim()).filter(Boolean);
+            
+            let results = [];
+
+            seeds.forEach(seed => {
+                results.push(seed); // Keep original seed
+                modifiers.forEach(mod => {
+                    results.push(`${mod} ${seed}`);
+                    results.push(`${seed} ${mod}`);
+                });
+            });
+
+            // Remove duplicates
+            const uniqueResults = [...new Set(results)];
+
+            document.getElementById('t3-result').innerText = uniqueResults.join('\n');
+            document.getElementById('t3-count').innerText = `${uniqueResults.length} Keywords Generated`;
+            document.getElementById('t3-output-box').style.display = 'block';
+        }
     </script>
 </body>
 </html>
