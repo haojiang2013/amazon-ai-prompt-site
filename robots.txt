@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Prevent indexing of specific backend or private folders if they are added later
+Disallow: /private/
+Disallow: /tmp/
+
+# Link to sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
